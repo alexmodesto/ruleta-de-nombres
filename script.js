@@ -1,5 +1,5 @@
-const names = ['Ana', 'Bruno', 'Carlos', 'Diana', 'Elena', 'Fernando']; // Agrega más nombres según necesites
-const colors = ['#FF5733', '#FFC300', '#DAF7A6', '#33FF57', '#3380FF', '#E433FF']; // Colores de los segmentos
+const names = ['Ana', 'Bruno', 'Carlos', 'Diana', 'Elena', 'Fernando'];
+const colors = ['#FF5733', '#FFC300', '#DAF7A6', '#33FF57', '#3380FF', '#E433FF'];
 
 document.getElementById('spinButton').addEventListener('click', function() {
     const audio = new Audio('spin-sound.mp3');
@@ -11,15 +11,15 @@ document.getElementById('spinButton').addEventListener('click', function() {
 
 window.onload = function() {
     const wheel = document.getElementById('wheel');
-    for (let i = 0; i < names.length; i++) {
-        const angle = 360 / names.length * i;
+    names.forEach((name, index) => {
+        const angle = 360 / names.length * index;
         const segment = document.createElement('div');
         segment.className = 'segment';
-        segment.style.backgroundColor = colors[i % colors.length];
+        segment.style.backgroundColor = colors[index % colors.length];
         segment.style.transform = `rotate(${angle}deg)`;
-        segment.textContent = names[i];
+        segment.textContent = name;
         wheel.appendChild(segment);
-    }
+    });
 };
 
 document.getElementById('themeButton').addEventListener('click', function() {
