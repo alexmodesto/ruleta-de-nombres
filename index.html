@@ -1,46 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Volunteer</title>
-    <link  rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="menuStyle.css">
-    <meta name="viewport" content="width=device-width">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juego de la Ruleta FET!</title>
+  <link rel="stylesheet" href="css/estilo.css">
+  <link rel="icon" href="data:,">
 </head>
-<>
 
-<header>
-    <div class="contenedor">
-        <h1>Get lucky with HackFem</h1>
+<body>
+  <div id="premio">
+
+    <table style=" margin: 0 auto;">
+      <tr>
+        <td>
+          <p class="elije">El afortunado/a respondera una pregunta:</p>
+        </td>
+        <td><img src="image/cortesia.png" class="imgSorpresa"></td>
+
+      </tr>
+      <tr>
+        <td>
+          <p class="contador">TURNOS: 0</p>
+        </td>
+      </tr>
+    </table>
+
+  </div>
+
+  <div class="vara"></div>
+  <div>
+    <img src="image/ruleton_muyruletoso.png" id="ruleta">
+  </div>
+  <div>
+    <div id="sonido" style="display: none;">
+      <iframe src="sonido/ruleta.mp3" id="audio"></iframe>
+
     </div>
-</header>
-<img src="img/duende.gif">
-<main>
-    <div class="firstDiv">
-        <h1 class="volunteer" id="titulo"> Are you ready ? let's get it started</h1>
-        <h2 class="students" id = "boton">Click the coin</h2>
-    </div>
+  </div>
 
-</main>
 
-<!-- Ventana de bienvenida -->
-<input type="checkbox" id="cerrar">
-<label for="cerrar" id="btn-cerrar">X</label>
-<div class="modal">
-    <div class="contenido">
-        <h2>Welcome to our game</h2>
-        <img src="img/duendeBienvenida.jpg" width="300" height="300" alt="">
-        <h2>We hope you have lots of fun</h2>
-    </div>
-</div>
-<!-- fin ventana de bienvenida-->
-
-<div id="list">
-
-</div>
-
-<script type="text/javascript" src="main.js"></script>
+  <script src="js/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="js/script.js"></script>
 </body>
+
 </html>
