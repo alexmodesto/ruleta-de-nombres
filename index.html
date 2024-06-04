@@ -1,17 +1,46 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>Ruleta de Nombres</title>
+    <title>Volunteer</title>
+    <link  rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="menuStyle.css">
+    <meta name="viewport" content="width=device-width">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="wheel-container">
-        <div class="wheel" id="wheel"></div>
+<>
+
+<header>
+    <div class="contenedor">
+        <h1>Get lucky with HackFem</h1>
     </div>
-    <button id="spinButton">Girar Ruleta</button>
-    <button id="themeButton">Cambiar tema</button>
-    <script src="script.js"></script>
+</header>
+<img src="img/duende.gif">
+<main>
+    <div class="firstDiv">
+        <h1 class="volunteer" id="titulo"> Are you ready ? let's get it started</h1>
+        <h2 class="students" id = "boton">Click the coin</h2>
+    </div>
+
+</main>
+
+<!-- Ventana de bienvenida -->
+<input type="checkbox" id="cerrar">
+<label for="cerrar" id="btn-cerrar">X</label>
+<div class="modal">
+    <div class="contenido">
+        <h2>Welcome to our game</h2>
+        <img src="img/duendeBienvenida.jpg" width="300" height="300" alt="">
+        <h2>We hope you have lots of fun</h2>
+    </div>
+</div>
+<!-- fin ventana de bienvenida-->
+
+<div id="list">
+
+</div>
+
+<script type="text/javascript" src="main.js"></script>
 </body>
 </html>
