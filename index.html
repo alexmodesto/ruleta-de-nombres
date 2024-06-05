@@ -1,112 +1,17 @@
-
 <!DOCTYPE html>
-<html lang="es" class=" ">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width,user-scalable=0,initial-scale=1" />
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <link rel='stylesheet' type='text/css' media='screen' href='css/styles.css'>
-        <script src='js/main.js'></script>
-        <link rel="shortcut icon" href="https://assets.piliapp.com/s3pxy/random/wheel/favicon.ico">
-        <meta property="og:image" content="https://assets.piliapp.com/s3lnk/random/wheel/screenshot.png">
-        <title>La Ruleta Aleatoria</title>
-    </head>
-    <body>
-        <div class="container">
-            <div class="row no-gutters">
-                <div class="col-12">
-                    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="breadcrumb">
-                        <a class="navbar-brand" href="https://es.piliapp.com">PiliApp</a>
-                        <button class="navbar-toggler" type="button" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbar">
-                            <ul class="navbar-nav mr-auto">
-                                <li class="nav-item active">
-                                    <a class="nav-link" href="https://es.piliapp.com/random/wheel/">La Ruleta Aleatoria</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="https://es.piliapp.com/random/dice/">Tirar el dado</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="https://es.piliapp.com/random/number/">Generador de números aleatorios</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="https://es.piliapp.com/random/password/">Password Generator</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-                </div>
-            </div>
-        </div>
-        <div class="container">
-            <div id="piliapp" class="row">
-                <div class="col-12">
-                    <div class="row">
-                        <div id="header" class="col-12 col-xl-6 offset-xl-3 text-center pt-3 pb-3">
-                            <h1>La Ruleta Aleatoria</h1>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-12 col-xl-6 offset-xl-3" id="results">
-                            <div id="wheel-wrapper">
-                                <canvas id="canvas" width="500" height="500"></canvas>
-                            </div>
-                        </div>
-                        <div class="col-12 col-xl-3 mt-3 mt-xl-0 d-flex flex-column" id="sidebar">
-                            <div class="d-flex align-items-center mb-2">
-                                <div class="mx-auto">
-                                    <input id='spin' type="button" value="Iniciar" class="spin-btn btn btn-primary btn-lg">
-                                </div>
-                            </div>
-                            <textarea id="names" class="names" placeholder="Ingrese el nombre de las personas aquí y sepárelo con una línea diferente."></textarea>
-                            <div class="d-none d-xl-block">
-                                <div id="shortcut">
-                                    <div><span class="key">F11</span> Pantalla Completa</div>
-                                    <div><span id="start" class="key">SPACE</span> Gíralo</div>
-                                    <div><span id="reset" class="key">R</span> Reiniciar</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 col-xl-6 offset-xl-3 col-md-8 offset-md-2 offset-xl-0" id="desc">
-                    <p>Esta es una herramienta en línea para elegir el nombre o el artículo al azar.También se llama selector de nombres aleatorios, rueda de nombres o ruleta en línea. A veces es difícil para las personas tomar decisiones. Luego haga una lista de opciones o candidatos existentes y luego seleccione al azar uno de ellos. En este caso, puede utilizar nuestra herramienta para tomar decisiones. Sencillo y divertido.Puede modificar los nombres en textarea, poner un nombre por línea.Los nombres se dibujarán en el círculo.Simplemente haga clic en la rueda circular, comenzará a girar durante unos segundos. El resultado es seleccionar al azar uno de los nombres de la lista.También proporcionamos útiles teclas de acceso directo si está utilizando el escritorio.</p>
-                    <p>¿Qué pasa cuando empiezas a rotar (hacer clic)?El programa de esta página generará un número realmente aleatorio mediante la API de JavaScript nativa y calculará este número para apuntar a uno de los nombres.Luego, la rueda circular comienza a girar utilizando el método CSS3-2D.</p>
-                </div>
-            </div>
-            <div class="footer col-12">
-                <div class="row">
-                    <div class="col-12 col-xl-8 offset-xl-2 text-center mt-5">
-                        <div class="base-footer">
-                            <div>
-                                <a href="https://es.piliapp.com">Inicio</a> | 
-                                <a href="https://es.piliapp.com/label/symbols/">Emoji y símbolos</a> | 
-                                <a href="https://es.piliapp.com/label/text/">Herramienta de texto</a> | 
-                                <a href="https://es.piliapp.com/label/time-and-date/">Hora y fecha</a> | 
-                                <a href="https://es.piliapp.com/label/utilities/">Utilidades</a>
-                            </div>
-                            <div>
-                                <a rel="nofollow" href="/feedback/report/" target="_blank">Notificar un problema</a> |
-                                <a href="/lnk/*http://global-blog.piliapp.com">Blog</a> |
-                                <a href="https://es.piliapp.com/page/privacy/">Privacidad</a> |
-                                <a href="https://es.piliapp.com/page/terms/">Términos</a> |
-                                <a id="languages" href="/page/language/?app_uri=%2Frandom%2Fwheel%2F">🌐</a> | © 2021
-                            </div>
-                            <div>
-                                ᴅᴇsɪɢɴᴇᴅ ʙʏ <a style="font-variant:small-caps;color:gray;" href="https://pili.app">pili.app</a>
-                                <span id="footer-from"> ɪɴ ᴛᴀɪᴡᴀɴ</span>
-                                <span id="footer-thx"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </body>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="main.js"></script>
+    <title>La Ruleta Aleatoria</title>
+</head>
+<body>
+    <div id="main-container">
+        <canvas id="canvas" width="500" height="500"></canvas>
+        <button id="spin">Girar</button>
+        <textarea id="names" placeholder="Añade nombres separados por un salto de línea."></textarea>
+    </div>
+</body>
 </html>
