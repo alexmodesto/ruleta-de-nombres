@@ -1,27 +1,297 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <title>Document</title>
-  </head>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>NameWheels</title>
+    <script src='cloudfront.net/js/bootstrap.min.js'>
+    </script><link href='cloudfront.net/css/bootstrap.min.css' rel='stylesheet'/>
+    <style type="text/css"></style>
+</head>
   <body>
-    <button id="spin">Spin</button>
-    <span class="arrow"></span>
-    <div class="container">
-      <div class="germany">Germany</div>
-      <div class="united">United Kingdom</div>
-      <div class="france">France</div>
-      <div class="italy">Italy</div>
-      <div class="spain">Spain</div>
-      <div class="sweden">Sweden</div>
-      <div class="greece">Greece</div>
-      <div class="holanda">Netherlands</div>
-      <div class="spain">Spain</div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-7">
+          <canvas id="myCanvas" style="width:80%;height:70%" width="800" height="800" onclick="spin()"></canvas>
+        </div>
+        <div class="col-md-3">
+          <br><br>
+          <textarea id="names" placeholder="Put contestants names here, one name per line" class="form-control" style="vertical-align:top;width:300px;height:400px"></textarea>
+          <button class="btn btn-default" onclick="addNames()">Add names to wheel</button>
+          <button class="btn btn-default" onclick="spin()">Spin!</button>
+        </div>
+      </div>
     </div>
 
-    <script src="script.js"></script>
-  </body>
+    <div class="modal fade" id="winnerModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
+            <h4 class="modal-title" id="winnerModalLabel">We have a winner!</h4>
+          </div>
+          <div class="modal-body">
+            <p class="h1" id="winner_name"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="removeWinner();drawWheel(myWheel);">Remove winner</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+
+      // ImageCache class, used for loading images and keeping them in memory
+
+      function ImageCache () {
+        this.images = new Object();
+
+        this.addImage = function(imageName) {
+          this.images[imageName] = new Image();
+          this.images[imageName].src = imageName;
+        };
+
+        this.getImage = function(imageName) {
+          if (imageName in this.images) {
+            return this.images[imageName];
+          }
+          else {
+            throw 'Image ' + imageName + ' not found in ImageCache!';
+          }
+        };
+      }
+
+
+      // Wheel class, keeping track of angle and speed of the spinning
+
+      function Wheel () {
+        this.names = ['', '', '', '', '', '', '', ''];
+        this.angle = 0;
+        this.speed = 0;
+
+        this.setNames = function(names) {
+          this.names = names;
+        }
+
+        this.startSpin = function() {
+          this.speed = .5 + Math.random() / 10.0;
+        }
+
+        this.tick = function() {
+          this.angle += this.speed;
+          if (this.angle > Math.PI * 2) {
+            this.angle -= Math.PI * 2;
+          }
+          this.speed = this.speed * .99;
+          if (this.speed < 0.002) {
+            this.speed = 0;
+          }
+        }
+
+        this.getResult = function() {
+          var radiansPerSegment = 2 * Math.PI / this.names.length;
+          var index = this.angle / radiansPerSegment;
+          index = Math.round(index);
+          if (index >= this.names.length) {
+            index = 0;
+          }
+          var result = this.names[index];
+          return result;
+        }
+
+        this.removeName = function(name) {
+          this.names.splice(this.names.indexOf(name), 1);
+        }
+      }
+
+      // TextBox class, filtering the user-entered content in the area.
+
+      function TextBox (formField) {
+        this.formField = formField;
+
+        this.removeBlankLines = function() {
+          var newLines = [];
+          var lines = this.getEntries();
+          for (var i = 0; i < lines.length; i++) {
+            var thisLine = lines[i];
+            if (thisLine.length > 0) {
+              newLines.push(thisLine);
+            }
+          }
+          this.formField.value = newLines.join('\n');
+        }
+
+        this.removeDuplicateLines = function() {
+          var newLines = [];
+          var duplicates = 0;
+          var lines = this.getEntries();
+          for (var i = 0; i < lines.length; i++) {
+            var thisLine = lines[i];
+            if (newLines.indexOf(thisLine) == -1) {
+              newLines.push(thisLine);
+            }
+            else {
+              duplicates += 1;
+            }
+          }
+          this.formField.value = newLines.join('\n');
+          return duplicates;
+        }
+
+        this.getEntries = function() {
+          return this.formField.value.replace(/\r\n/g, "\n").split("\n");
+        }
+
+        this.removeEntry = function(entry) {
+          var lines = this.getEntries();
+          lines.splice(lines.indexOf(entry), 1);
+          this.formField.value = lines.join('\n');
+        }
+      }
+
+
+      Array.prototype.getOneRandomElement = function() {
+        return this[Math.floor(Math.random() * this.length)];
+      }
+
+      Array.prototype.getRandomElements = function(numberOfElementsToGet) {
+        var retval = [];
+        var clone = this.slice(0);
+        for (var i = 0; i < numberOfElementsToGet; i++) {
+          if (clone.length == 0) {
+            break;
+          }
+          else {
+            var element = clone.getOneRandomElement();
+            retval.push(element);
+            clone.splice(clone.indexOf(element), 1);
+          }
+        }
+        return retval;
+      }
+
+      // Drawing of the empty wheel.
+      var imageCache;
+      var myWheel = new Wheel();
+      var myTextBox = new TextBox(document.getElementById('names'));
+      drawWheel(myWheel);
+
+      // Event handlers, triggered by the user clicking a button.
+      
+      function spin() {
+        myWheel.startSpin();
+        animateWheel(myWheel);
+      }
+
+      function addNames() {
+        myTextBox.removeBlankLines();
+        var duplicates = myTextBox.removeDuplicateLines();
+        var entries = myTextBox.getEntries();
+        myWheel.setNames(entries.getRandomElements(50));
+        drawWheel(myWheel);
+        var messages = [];
+        if (duplicates > 0) {
+          messages.push('There were ' + duplicates + ' duplicate entries in ' +
+            'the text box. They were removed.');
+        }
+      }
+
+      function removeWinner() {
+        var winnerName = myWheel.getResult()
+        myWheel.removeName(winnerName);
+        myTextBox.removeEntry(winnerName);
+      }
+
+      // Drawing a snapshot in time of the spinning wheel.
+
+      function drawWheel(myWheel) {
+        var canvas = document.getElementById('myCanvas');
+        var context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        if (!imageCache) {
+          imageCache = new ImageCache();
+          imageCache.addImage('mobilization-soldier.png');
+        }
+        context.save();
+        context.translate(context.canvas.width / 2, context.canvas.height / 2);
+        context.rotate(myWheel.angle);
+        var radiansPerSegment = 2 * Math.PI / myWheel.names.length;
+        var colors = ['#3369E8', '#D50F25', '#EEB211', '#009925'];
+        var wheelRadius = context.canvas.width * .45;
+        for (var i = 0; i < myWheel.names.length; i++) {
+          context.beginPath();
+          context.moveTo(0, 0);
+          context.arc(0, 0, wheelRadius, -radiansPerSegment/2, radiansPerSegment/2);
+          context.lineTo(0, 0);
+          context.fillStyle = colors[i % colors.length];
+          context.fill();
+          context.lineWidth = 1;
+          context.strokeStyle = '#333333';
+          context.stroke();
+          context.fillStyle = 'black';
+          context.font = '16pt Helvetica';
+          context.textBaseline = 'middle';
+          context.textAlign = 'end';
+          context.fillText(myWheel.names[i], wheelRadius - 10, 0);
+          context.rotate(-radiansPerSegment);
+        }
+        context.restore();
+        // Draw center circle, to reduce weird line effects.
+        context.save();
+        context.translate(context.canvas.width / 2, context.canvas.height / 2);
+        context.fillStyle = 'white';
+        context.beginPath();
+        context.arc(0, 0, wheelRadius/5, 0, Math.PI * 2);
+        context.fill();
+        context.lineWidth = 2;
+        context.strokeStyle = '#333333';
+        context.stroke();
+        context.restore();
+        // Draw triangle that points to the winner.
+        context.save();
+        context.translate(context.canvas.width / 2, context.canvas.height / 2);
+        context.beginPath();
+        context.moveTo(wheelRadius - 10, 0);
+        context.lineTo(wheelRadius + 30, -20);
+        context.lineTo(wheelRadius + 30, 20);
+        context.lineTo(wheelRadius - 10, 0);
+        context.fillStyle = 'lightgray';
+        context.fill();
+        context.lineWidth = 2;
+        context.strokeStyle = '#333333';
+        context.stroke();
+        context.restore();
+      }
+
+      // Animation of the spinning wheel.
+
+      window.requestAnimFrame = (function(callback) {
+        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
+        function(callback) {
+          window.setTimeout(callback, 1000 / 60);
+        };
+      })();
+
+      function animateWheel(myWheel) {
+        myWheel.tick();
+        drawWheel(myWheel);
+        if (myWheel.speed > 0) {
+          requestAnimFrame(function() {
+            animateWheel(myWheel);
+          });
+        }
+        else {
+          setTimeout(function() {
+            document.getElementById('winner_name').innerHTML = myWheel.getResult();
+            $('#winnerModal').modal();
+          }, 1000);
+        }
+      }
+
+    </script>
+  
+</body>
 </html>
