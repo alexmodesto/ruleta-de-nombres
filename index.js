@@ -42,6 +42,7 @@ const sliceAngle = fullCircle / totalSectors;
 
 let rotationalVelocity = 0;
 let currentAngle = 0;
+let buttonClicked = false;  // Añadir esta línea
 
 const getCurrentSector = () => Math.floor(totalSectors - (currentAngle / fullCircle) * totalSectors) % totalSectors;
 
